@@ -1,0 +1,13 @@
+name: XMin
+license: MIT
+licenselink: https://github.com/nikkomiu/threere-theme/blob/master/LICENSE
+description: ThreeRe site theme
+homepage: "https://threere.com"
+demosite: "https://threere.com"
+tags: ["custom"]
+features: ["blog"]
+min_version: "0.18"
+
+author:
+  name: "Nikko Miu"
+  homepage: "https://threere.com"
