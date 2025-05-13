@@ -1,0 +1,212 @@
+{{ define "main" }}
+  <article class="post" data-pagefind-body>
+    <div class="flex relative">
+      <h1 class="post-title flex items-center text-fuchsia-300 w-full">
+        {{ .Title | markdownify }}
+      </h1>
+      {{ if .Site.BuildDrafts }}
+        {{ if .Draft }}
+          <span
+            class="flex absolute right-0 center uppercase items-center text-sm px-2 py-1 ml-auto select-none text-orange-300 bg-orange-900 rounded-full"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+              class="sm:mr-1 w-4 h-4"
+            >
+              <use href="#hi-beaker" />
+            </svg>
+            <span class="hidden sm:inline" data-pagefind-filter="draft">
+              Draft
+            </span>
+          </span>
+        {{ else }}
+          <span class="hidden" data-pagefind-filter="draft">Published</span>
+        {{ end }}
+      {{ end }}
+    </div>
+
+    <div class="post-meta">
+      {{ if .Date }}
+        <time class="post-date">
+          {{ .Date.Format "2006-01-02" }}
+          {{ if $.Site.Params.showLastUpdated }}
+            [{{ or $.Site.Params.updatedDatePrefix "Updated" }} ::
+            {{ .Lastmod.Format "2006-01-02" }}]
+          {{ end }}
+        </time>
+      {{ end }}
+      {{ if and .Date .Params.Author }}
+        ::
+      {{ end }}
+      {{ with .Params.Author }}
+        {{ $authorPagePath := printf "/authors/%s/index.html" (lower (replace . " " "-")) }}
+        {{ with $.Site.GetPage $authorPagePath }}
+          <span>
+            <a href="{{ .RelPermalink }}" data-pagefind-filter="author">
+              {{ .Title }}
+            </a>
+          </span>
+        {{ else }}
+          <span class="text-fuchsia-300" data-pagefind-filter="author">
+            {{ . }}
+          </span>
+        {{ end }}
+      {{ end }}
+      {{ if and (.Param "readingTime") (eq (.Param "readingTime") true) }}
+        <span class="post-reading-time">
+          ::
+          {{ .ReadingTime }}
+          {{ $.Site.Params.minuteReadingTime | default "min read" }}
+          ({{ .WordCount }} {{ $.Site.Params.words | default "words" }})
+        </span>
+      {{ end }}
+    </div>
+
+    {{ if .Params.tags }}
+      <span class="text-neutral-400 print:text-neutral-300">
+        {{ range .Params.tags }}
+          #<a
+            href="{{ (urlize (printf "tags/%s/" .)) | absLangURL }}"
+            class="no-underline hover:underline text-neutral-400 hover:text-neutral-100 print:text-neutral-300"
+            data-pagefind-filter="tag"
+          >
+            {{- . -}}
+          </a>
+        {{ end }}
+      </span>
+    {{ end }}
+    {{ partial "cover.html" . }}
+
+    {{ if (.Params.Toc | default .Site.Params.Toc) }}
+      <div class="table-of-contents">
+        <h2>
+          {{ (.Params.TocTitle | default .Site.Params.TocTitle) | default "Table of Contents" }}
+        </h2>
+        {{ .TableOfContents }}
+      </div>
+    {{ end }}
+
+
+    <div class="post-content prose prose-neutral prose-invert max-w-none">
+      {{- with .Content -}}
+        <div>
+          {{ . | replaceRE "(<h[1-9] id=\"([^\"]+)\".+)(</h[1-9]+>)" `
+            <div class="hanchor-block">
+            ${1}
+            <a href="#${2}" ariaLabel="Anchor" class="hanchor-link">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-6 h-6">
+            <use href="#hi-link" />
+            </svg>
+            </a>
+            </div>
+            ${3}` | safeHTML
+          }}
+        </div>
+      {{- end -}}
+    </div>
+  </article>
+
+  {{ $pt := .Parent.Type | inflect.Singularize | strings.Title }}
+  {{ if or .Params.next .Params.prev .PrevInSection .NextInSection }}
+    <div
+      class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 mb-6 pt-2 print:hidden"
+    >
+      {{ if or .Params.prev .NextInSection }}
+        {{ $prev := .NextInSection }}
+        {{ if .Params.prev }}
+          {{ $prev = $.Site.GetPage .Params.prev }}
+        {{ end }}
+        <a
+          href="{{ $prev.Permalink }}"
+          class="flex flex-row w-full sm:w-auto mr-auto text-neutral-200 hover:bg-neutral-900 hover:text-white py-3 pl-2 pr-12 sm:pr-10 border-2 border-neutral-800 justify-center bg-black hover:shadow-neutral-900 hover:shadow-lg transition-all"
+        >
+          <div class="flex items-center mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-10 h-10"
+            >
+              <use href="#hi-chevron-left" />
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <h2 class="!mt-0 text-lg">Previous {{ $pt }}</h2>
+            <p class="m-0 text-neutral-400 text-sm">{{ $prev.Title }}</p>
+          </div>
+        </a>
+      {{ end }}
+
+      {{ if or .Params.next .PrevInSection }}
+        {{ $next := .PrevInSection }}
+        {{ if .Params.next }}
+          {{ $next = $.Site.GetPage .Params.next }}
+        {{ end }}
+        <a
+          href="{{ $next.Permalink }}"
+          class="flex flex-row w-full sm:w-auto ml-auto text-right text-neutral-200 hover:bg-neutral-900 hover:text-white py-3 pr-2 pl-12 sm:pl-10 border-2 border-neutral-800 justify-center bg-black hover:shadow-neutral-900 hover:shadow-lg transition-all"
+        >
+          <div class="flex flex-col">
+            <h2 class="!mt-0 text-lg">Next {{ $pt }}</h2>
+            <p class="m-0 text-neutral-400 text-sm">{{ $next.Title }}</p>
+          </div>
+          <div class="flex items-center ml-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-10 h-10"
+            >
+              <use href="#hi-chevron-right" />
+            </svg>
+          </div>
+        </a>
+      {{ end }}
+    </div>
+  {{ end }}
+
+
+  <div class="flex print:hidden">
+    <a
+      href="{{ .Parent.Permalink }}"
+      class="flex flex-row mx-auto w-full sm:w-auto lg:order-none mb-2 hover:bg-neutral-900 text-neutral-200 hover:text-white py-3 px-6 border-2 border-neutral-800 justify-center bg-black hover:shadow-neutral-900 hover:shadow-lg transition-all"
+    >
+      <div class="flex items-center mr-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-8 h-8"
+        >
+          <use href="#hi-arrow-uturn-up" />
+        </svg>
+      </div>
+      <div class="flex flex-col justify-center">
+        {{ if or (not .Parent.Title) (ne (.Parent.Title | inflect.Singularize) ($pt | inflect.Singularize)) }}
+          <h2 class="!mt-0 text-lg">Back to {{ $pt }}</h2>
+          <p class="m-0 text-neutral-400 text-sm">{{ .Parent.Title }}</p>
+        {{ else }}
+          <h2 class="!mt-0 text-lg">Back to {{ $pt | inflect.Pluralize }}</h2>
+        {{ end }}
+      </div>
+    </a>
+  </div>
+
+  {{ if eq .Type $.Site.Params.contentTypeName }}
+    {{ partial "posts_pagination.html" . }}
+  {{ end }}
+
+  {{ if not (.Params.hideComments | default false) }}
+    {{ partial "comments.html" . }}
+  {{ end }}
+{{ end }}

@@ -1,0 +1,47 @@
+{{ $contentClass := "max-w-3xl" }}
+{{ if eq .Params.Width "lg" }}
+  {{ $contentClass = "max-w-4xl" }}
+{{ else if eq .Params.Width "xl" }}
+  {{ $contentClass = "max-w-6xl" }}
+{{ else if eq .Params.Width "full" }}
+  {{ $contentClass = "max-w-full" }}
+{{ end }}
+
+
+<!DOCTYPE html>
+<html lang="{{ $.Site.Language }}">
+  <head>
+    {{ block "title" . }}
+      <title>
+        {{ if .IsHome }}
+          {{ $.Site.Title }}
+        {{ else }}
+          {{- if .Title }}{{ .Title }} ::{{ end }}
+          {{ $.Site.Title }}
+        {{ end }}
+      </title>
+    {{ end }}
+    {{ partial "head.html" . }}
+  </head>
+  <body class="flex flex-1 text-white" style="background:rgb(10 10 10)">
+    <div class="flex flex-col w-full">
+      <div
+        class="content flex-1 w-full mx-auto px-4 print:max-w-full {{ $contentClass }}"
+      >
+        {{ partial "header.html" . }}
+
+
+        <div class="flex flex-col pt-6 pb-10">
+          {{ block "main" . }}
+          {{ end }}
+        </div>
+      </div>
+
+      {{ block "footer" . }}
+        {{ partial "footer.html" . }}
+      {{ end }}
+
+      {{ partial "svg.html" . }}
+    </div>
+  </body>
+</html>

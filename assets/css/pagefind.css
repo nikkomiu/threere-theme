@@ -1,0 +1,77 @@
+body {
+  --pagefind-ui-primary: rgb(250 232 255); /* fuchsia-100 */
+  --pagefind-ui-text: rgb(250 232 255); /* fuchsia-100 */
+  --pagefind-ui-background: #000; /* black */
+  --pagefind-ui-border: rgb(217 70 239); /* fuchsia-500 */
+  --pagefind-ui-tag: rgb(74 4 78); /* fuchsia-900 */
+  --pagefind-ui-font: "Hack", monaco, "Ubuntu Mono", consolas, monospace;
+  --pagefind-ui-border-radius: 0;
+}
+
+@keyframes fade-in-perception {
+  0% {
+    opacity: 0;
+  }
+
+  90% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-in-perception {
+  animation-name: fade-in-perception;
+  animation-duration: 1000ms;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+  height: 100%;
+}
+
+.site-search .fade-in-perception {
+  @apply flex mx-auto self-center text-neutral-400;
+}
+
+.site-search .fade-in-perception svg {
+  @apply mr-1 h-[1.5rem] w-[1.5rem];
+}
+
+.site-search li::before {
+  content: "";
+}
+
+.site-search form::before {
+  background-color: #ee72f1;
+}
+
+.site-search input:focus {
+  @apply outline-none border-fuchsia-400 bg-neutral-900;
+}
+
+.site-search input::placeholder {
+  @apply text-fuchsia-300;
+}
+
+/* stylelint-disable-next-line selector-class-pattern */
+.site-search .pagefind-ui__search-clear {
+  background: transparent !important;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  animation-name: spin;
+  animation-duration: 3000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}

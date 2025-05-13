@@ -1,0 +1,84 @@
+<header class="header select-none w-full mt-2 md:mt-6">
+  <div class="flex">
+    <div class="flex flex-1 header-logo">
+      {{ partial "logo.html" . }}
+    </div>
+    {{ if len $.Site.Menus }}
+      {{ partial "mobile-menu.html" . }}
+    {{ end }}
+
+    {{ if len $.Site.Menus }}
+      {{ partial "menu.html" . }}
+    {{ end }}
+  </div>
+
+  <ul class="breadcrumbs flex items-stretch overflow-x-auto py-6 print:hidden">
+    {{- range .Ancestors.Reverse }}
+      <li class="flex mr-2 select-none whitespace-nowrap">
+        <a
+          class="underline transition-all ease-in-out text-neutral-300 hover:text-white hover:no-underline"
+          href="{{ .RelPermalink }}"
+        >
+          {{ .Title }}
+        </a>
+      </li>
+    {{- end }}
+    <li class="flex text-neutral-400 select-none whitespace-nowrap">
+      {{ .Title }}
+    </li>
+  </ul>
+</header>
+
+<div
+  class="site-search-modal fixed top-0 left-0 w-full h-full sm:backdrop-blur overflow-y-auto hidden bg-black z-10"
+>
+  <div class="flex justify-end sm:bg-black sm:bg-transparent p-2">
+    <button
+      class="flex site-search-close sm:p-2 sm:m-2 sm:rounded-full sm:bg-neutral-950 shadow hover:shadow-lg hover:bg-neutral-800 transition-all"
+    >
+      <svg class="flex h-6 w-6">
+        <use href="#hi-x-mark" />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="w-full sm:max-w-xl mx-auto sm:bg-black sm:my-8 sm:border-2 sm:border-neutral-800 p-4 animate__animated animate__fadeInDown animate__faster"
+  >
+    <div id="gbl-site-search" class="site-search">
+      <div class="fade-in-perception w-full flex justify-center p-2">
+        <div class="loading flex text-neutral-500 text-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            width="20"
+            height="20"
+            class="spin"
+          >
+            <use href="#hi-arrow-path" />
+          </svg>
+          <span class="ml-2">Loading search...</span>
+        </div>
+        <noscript>
+          <div class="flex text-neutral-700">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              width="20"
+              height="20"
+              class="text-yellow-900"
+            >
+              <use href="#hi-exclamation-triangle" />
+            </svg>
+            <span class="ml-2">JavaScript is required for search to work.</span>
+          </div>
+        </noscript>
+      </div>
+    </div>
+  </div>
+</div>

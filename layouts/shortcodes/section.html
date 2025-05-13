@@ -1,0 +1,24 @@
+<section class="collapse-section flex flex-col my-4">
+  <button
+    class="section-title flex items-center justify-start font-bold w-full pointer select-none mb-0 text-fuchsia-500 bg-neutral-900/50 border-l-4 border-fuchsia-700 p-2 hover:underline hover:bg-neutral-900"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="title-indicator ease-in-out transition-transform mr-2 w-6 h-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M8.25 4.5l7.5 7.5-7.5 7.5"
+      />
+    </svg>
+    {{ .Get "title" }}
+  </button>
+  <div class="section-content hidden transition-all ease-in-out">
+    {{ .Inner | markdownify }}
+  </div>
+</section>

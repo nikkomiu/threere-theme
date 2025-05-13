@@ -1,0 +1,90 @@
+{{ define "main" }}
+  <article class="author post">
+    <div class="md:flex items-start">
+      {{ partial "cover.html" . }}
+
+
+      <div class="flex flex-col md:ml-10 mt-10 md:mt-0">
+        <h1 class="post-title flex" style="margin-top:0">
+          <a href="{{ .Permalink }}">{{ .Title | markdownify }}</a>
+        </h1>
+
+        {{ if .Params.tags }}
+          <span class="text-neutral-400">
+            {{ range .Params.tags }}
+              #<a
+                href="{{ (urlize (printf "tags/%s/" .)) | absLangURL }}"
+                class="no-underline hover:underline text-neutral-400 hover:text-neutral-300"
+                data-pagefind-filter="tag"
+              >
+                {{- . -}}
+              </a>
+            {{ end }}
+          </span>
+        {{ end }}
+
+        {{ if (.Params.Toc | default .Site.Params.Toc) }}
+          <div class="table-of-contents">
+            <h2>
+              {{ (.Params.TocTitle | default .Site.Params.TocTitle) | default "Table of Contents" }}
+            </h2>
+            {{ .TableOfContents }}
+          </div>
+        {{ end }}
+
+
+        <div class="post-content mt-2">
+          {{- with .Content -}}
+            <div>
+              {{ . | replaceRE "(<h[1-9] id=\"([^\"]+)\".+)(</h[1-9]+>)" `<div class="hanchor-block">
+                ${1}
+                <a href="#${2}" ariaLabel="Anchor" class="hanchor-link">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-6 h-6">
+                <use href="#hi-link" />
+                </svg>
+                </a></div> ${3}` | safeHTML
+              }}
+            </div>
+          {{- end -}}
+        </div>
+      </div>
+    </div>
+
+    {{ if eq .Type $.Site.Params.contentTypeName }}
+      {{ partial "posts_pagination.html" . }}
+    {{ end }}
+
+
+    <div class="flex flex-col md:flex-row mt-12">
+      {{ $isntDefault := not (or (eq (trim $.Site.Params.contentTypeName " ") "posts") (eq (trim $.Site.Params.contentTypeName " ") "")) }}
+      {{ $contentTypeName := cond $isntDefault (string $.Site.Params.contentTypeName) "posts" }}
+      {{ $pages := where (where $.Site.Pages "Type" "in" $contentTypeName) "Params.Author" "==" .Title }}
+      {{ if $pages }}
+        <div class="flex flex-1 flex-col sm:pr-4">
+          <h3 class="mb-0 text-center text-2xl text-bold text-fuchsia-400">
+            Latest Posts
+          </h3>
+
+          {{ $postContext := dict "Pages" $pages "Parent" . }}
+          {{ partial "post-list.html" $postContext }}
+        </div>
+      {{ end }}
+
+      {{ $pages = where (where $.Site.Pages "Type" "in" "notes") "Params.Author" "==" .Title }}
+      {{ if $pages }}
+        <div class="flex flex-1 flex-col sm:pl-4">
+          <h3 class="mb-0 text-center text-2xl text-bold text-fuchsia-400">
+            Recent Notes
+          </h3>
+
+          {{ $postContext := dict "Pages" $pages "Parent" . }}
+          {{ partial "post-list.html" $postContext }}
+        </div>
+      {{ end }}
+    </div>
+
+    {{ if not (.Params.hideComments | default false) }}
+      {{ partial "comments.html" . }}
+    {{ end }}
+  </article>
+{{ end }}

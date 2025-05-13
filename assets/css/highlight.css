@@ -1,0 +1,30 @@
+.copy-button.active {
+  @apply opacity-80;
+}
+
+table:hover .copy-button {
+  @apply opacity-80;
+}
+
+.highlight .file-tab {
+  @apply absolute left-0 select-none text-sm border border-solid border-fuchsia-800 bg-fuchsia-950 text-fuchsia-400 px-2 top-[-1.5rem];
+
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.table-wrapper:hover > .copy-button {
+  @apply opacity-80;
+}
+
+.highlight .lang-tab {
+  @apply absolute right-0 select-none text-sm border border-solid border-fuchsia-900 bg-fuchsia-950 text-fuchsia-500 px-1 top-[-1.5rem];
+}
+
+.highlight:hover .copy-button {
+  @apply opacity-80;
+}
+
+.highlight pre {
+  @apply overflow-x-auto overflow-y-hidden whitespace-pre border border-fuchsia-900 px-4 py-3;
+}

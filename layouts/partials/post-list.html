@@ -1,0 +1,92 @@
+{{ if eq (len .Pages) 0 }}
+  <p class="text-center text-xl my-10">
+    {{ printf $.Parent.Site.Params.NoPostsMessage (pluralize .Parent.Type) }}
+  </p>
+{{ end }}
+{{ range .Pages }}
+  <article class="post py-8">
+    <h2
+      class="post-title flex items-center text-fuchsia-300 {{ if (and $.Parent.Content $.Parent.Title) -}}
+        small
+      {{- end }}"
+    >
+      <a href="{{ .Permalink }}">{{ .Title | markdownify }}</a>
+      {{ if .Draft }}
+        <span
+          class="flex center uppercase items-center text-sm px-2 py-1 ml-auto select-none text-orange-300 bg-orange-900 rounded-full"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+            class="sm:mr-1 w-4 h-4"
+          >
+            <use href="#hi-beaker" />
+          </svg>
+          <span class="hidden sm:inline">Draft</span>
+        </span>
+      {{ end }}
+    </h2>
+    <div class="post-meta">
+      {{ if .Date }}
+        <time class="post-date">
+          {{ .Date.Format "2006-01-02" }}
+        </time>
+      {{ end }}
+      {{ if and .Date .Params.Author }}
+        ::
+      {{ end }}
+      {{ with .Params.Author }}
+        {{ $authorPagePath := printf "/authors/%s/index.html" (lower (replace . " " "-")) }}
+        {{ with $.Parent.Site.GetPage $authorPagePath }}
+          <span class="post-author">
+            <a href="{{ .RelPermalink }}" data-pagefind-filter="author">
+              {{ .Title }}
+            </a>
+          </span>
+        {{ else }}
+          <span class="post-author" data-pagefind-filter="author">{{ . }}</span>
+        {{ end }}
+      {{ end }}
+    </div>
+
+    {{ if .Params.tags }}
+      <div class="text-neutral-400 mb-4">
+        {{ range .Params.tags }}
+          #<a
+            href="{{ (urlize (printf "tags/%s/" . )) | absLangURL }}"
+            class="no-underline hover:underline text-neutral-400 hover:text-neutral-100"
+          >
+            {{- . -}} </a
+          >&nbsp;
+        {{ end }}
+      </div>
+    {{ end }}
+
+    {{ partial "cover.html" . }}
+
+
+    <div class="post-content text-neutral-300">
+      {{ if .Params.showFullContent }}
+        {{ .Content }}
+      {{ else if .Description }}
+        {{ .Description | markdownify }}
+      {{ else }}
+        {{ .Summary }}
+      {{ end }}
+    </div>
+
+    {{ if not .Params.showFullContent }}
+      <div>
+        <a
+          class="block text-fuchsia-500 font-bold py-1 mt-3 mb-1 hover:text-fuchsia-300"
+          href="{{ .RelPermalink }}"
+        >
+          {{ $.Parent.Site.Params.ReadMore }} →
+        </a>
+      </div>
+    {{ end }}
+  </article>
+{{ end }}

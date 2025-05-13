@@ -1,0 +1,203 @@
+.prose blockquote {
+  @apply py-2 border-x-0 my-6 pl-8 pr-0 py-4 sm:pr-4 border-y-2 border-fuchsia-500 bg-black relative;
+}
+
+.prose blockquote::before {
+  @apply absolute left-2 text-fuchsia-500;
+
+  content: ">";
+}
+
+.prose blockquote p {
+  @apply relative text-neutral-300 my-4;
+}
+
+.prose ul li p {
+  @apply my-0;
+}
+
+.prose blockquote p::before {
+  content: "";
+}
+
+.prose blockquote p:first-of-type {
+  @apply mt-0;
+}
+
+.prose blockquote p:last-of-type {
+  @apply mb-0;
+}
+
+.prose blockquote p strong {
+  @apply text-neutral-100;
+}
+
+.prose pre,
+.prose code,
+.prose kbd {
+  @apply text-fuchsia-400 bg-fuchsia-950/75 py-[0.15rem] px-[0.3rem] font-mono;
+}
+
+.prose pre code {
+  @apply px-0 bg-transparent;
+}
+
+.prose code code,
+.prose kbd kbd {
+  @apply p-0 m-0;
+}
+
+.prose code::before {
+  content: "";
+}
+
+.prose code::after {
+  content: "";
+}
+
+.prose a {
+  @apply text-fuchsia-500 underline;
+}
+
+.prose a:hover {
+  @apply text-fuchsia-300;
+}
+
+.prose li p:first-of-type {
+  @apply mt-0;
+}
+
+.prose li p:last-of-type {
+  @apply mb-0;
+}
+
+.prose ol {
+  @apply pl-10 flex flex-col;
+}
+
+.prose ol > li {
+  @apply pl-0 my-1;
+}
+
+.prose ul > li::marker {
+  @apply text-fuchsia-500 font-bold;
+
+  content: "-";
+}
+
+.prose ul > li {
+  @apply pl-3;
+}
+
+.prose ul > li p:not(:first-of-type) {
+  @apply mt-2;
+}
+
+.prose ol > li::marker {
+  @apply text-fuchsia-500 font-bold;
+}
+
+.prose table {
+  @apply block bg-black border-2 border-fuchsia-700 border-collapse w-fit max-w-full mx-auto overflow-x-auto mb-10;
+}
+
+.prose table th {
+  @apply bg-fuchsia-950/[0.5] text-fuchsia-600 font-bold border-r py-2 px-3;
+}
+
+.prose table th:last-of-type {
+  @apply border-r-0;
+}
+
+.prose table td {
+  @apply text-fuchsia-400 border-r py-2 px-3;
+}
+
+.prose table td:last-of-type {
+  @apply border-r-0;
+}
+
+.prose table * {
+  @apply border-fuchsia-900 border-dashed;
+}
+
+.prose .highlight {
+  @apply mt-12 relative;
+}
+
+.prose samp pre {
+  @apply flex rounded-none bg-black text-green-600 border border-green-800 px-4 pb-4 pt-5 text-base;
+
+  line-height: 1;
+}
+
+.prose .highlight pre,
+.prose .highlight code {
+  @apply text-fuchsia-500 bg-black;
+}
+
+.prose .highlight > div {
+  @apply border border-fuchsia-900 border-solid;
+}
+
+.prose .highlight > pre {
+  @apply flex rounded-none mt-10 !bg-black border border-fuchsia-900 px-0;
+}
+
+.prose .highlight > pre > code {
+  @apply flex flex-col flex-1;
+}
+
+.prose .highlight > pre > code > span {
+  @apply px-4;
+}
+
+/* highlight shortcode - line number (non-numbered and numbered parent) */
+.prose .highlight code:not([data-lang]) > span {
+  @apply pt-[3px] pb-[3.5px] !pl-4 pr-2;
+}
+
+/* highlight shortcode - line highlight number */
+.prose .highlight code:not([data-lang]) > span > span {
+  @apply !pl-0;
+}
+
+.prose .highlight table {
+  @apply w-full;
+}
+
+.prose .highlight table code[data-lang] > span {
+  @apply pr-4;
+}
+
+.prose .highlight table pre {
+  @apply m-0 px-0 py-4 border-0;
+}
+
+.prose .highlight table td:first-child {
+  @apply bg-neutral-900/80;
+}
+
+.prose .highlight table td:first-child pre {
+  background-color: transparent !important;
+}
+
+.prose .highlight table td:last-child code > span {
+  @apply pl-3;
+}
+
+.prose .highlight table code {
+  @apply p-0;
+}
+
+.prose .mermaid {
+  @apply hidden bg-black mx-auto rounded-none border-2 border-neutral-800 px-4;
+}
+
+.prose .mermaid[data-processed="true"] {
+  @apply block w-full;
+}
+
+.prose .mermaid[data-processed="true"] svg {
+  @apply mx-auto;
+}
